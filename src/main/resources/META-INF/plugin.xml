@@ -1,0 +1,49 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>com.github.lizhiwei88.feign.mock.agent.feign.mock.plugin</id>
+
+    <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html#plugin-name -->
+    <name>Feign Client Mock</name>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor url="https://github.com/lizhiwei88">lizhiwei</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html#plugin-description -->
+    <description>This plugin allows developers to rapidly generate and preview Feign Client return values during development, making API debugging and unit testing more efficient while improving the overall developer experience.</description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+    <depends>com.intellij.spring</depends>
+
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="Feign Client Mock"
+                    anchor="right"
+                    icon="META-INF/rightIcon.svg"
+                    factoryClass="com.github.lizhiwei88.feign.mock.plugin.ui.FeignMockToolWindowFactory"/>
+
+        <java.programPatcher implementation="com.github.lizhiwei88.feign.mock.plugin.patcher.FeignAgentPatcher"/>
+        <notificationGroup id="FeignClientPluginNotificationGroup"
+                           displayType="BALLOON"
+                           isLogByDefault="false"
+                           title="Feign client mock Notifications"/>
+    </extensions>
+    <actions>
+        <action id="com.github.lizhiwei88.feign.mock.plugin.actions.JumpToFeignMockAction"
+                class="com.github.lizhiwei88.feign.mock.plugin.actions.JumpToFeignMockAction"
+                text="Jump to Feign Mock"
+                description="Navigate to Feign Mock tool window">
+            <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="GoToDeclaration"/>
+        </action>
+    </actions>
+    <projectListeners>
+        <listener class="com.github.lizhiwei88.feign.mock.plugin.listener.ProjectRunListener" topic="com.intellij.execution.ExecutionListener"/>
+        <listener class="com.github.lizhiwei88.feign.mock.plugin.listener.FeignMockDebugListener" topic="com.intellij.xdebugger.XDebuggerManagerListener"/>
+    </projectListeners>
+</idea-plugin>
